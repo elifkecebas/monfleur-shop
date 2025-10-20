@@ -17,7 +17,6 @@ services:
   - type: web
     name: monfleur-frontend
     env: static
-    region: frankfurt
     plan: free
     buildCommand: "cd frontend && yarn install && yarn build"
     staticPublishPath: ./frontend/build
