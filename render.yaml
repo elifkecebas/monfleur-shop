@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: monfleur-backend
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn server_new:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: monfleur-db
+          property: connectionString
+
+  - type: web
+    name: monfleur-frontend
+    env: static
+    region: frankfurt
+    plan: free
+    buildCommand: "cd frontend && yarn install && yarn build"
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        value: https://monfleur-backend.onrender.com
+
+databases:
+  - name: monfleur-db
+    region: frankfurt
+    plan: free
